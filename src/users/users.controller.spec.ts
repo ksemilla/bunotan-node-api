@@ -5,6 +5,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { FindOneOptions } from 'typeorm';
 import { User } from './users.entity';
 import { BadRequestException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 describe('UsersController', () => {
   let controller: UsersController;
@@ -27,13 +28,24 @@ describe('UsersController', () => {
     }),
   };
 
+  let mockConfigService = {
+    get: jest.fn().mockImplementation((arg: string | number) => {
+      switch (arg) {
+        case 'SALT_ROUNDS':
+          return 10;
+      }
+    }),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UsersController],
-      providers: [UsersService],
+      providers: [UsersService, ConfigService],
     })
       .overrideProvider(UsersService)
       .useValue(mockUsersService)
+      .overrideProvider(ConfigService)
+      .useValue(mockConfigService)
       .compile();
 
     controller = module.get<UsersController>(UsersController);
