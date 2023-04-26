@@ -16,6 +16,7 @@ import { CreateResult, FindAllResult } from 'src/interfaces';
 import { UserQueryDto } from './dto/query-user.dto';
 import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
+import { Public } from 'src/auth/auth.public';
 
 @Controller('users')
 export class UsersController {
@@ -24,6 +25,7 @@ export class UsersController {
     private readonly configService: ConfigService,
   ) {}
 
+  @Public()
   @Post()
   async create(@Body() createUserDto: CreateUserDto): Promise<CreateResult> {
     const tempUser = await this.usersService.findOne({
