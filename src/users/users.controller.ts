@@ -14,10 +14,15 @@ import { User } from './users.entity';
 import { DeleteResult } from 'typeorm';
 import { CreateResult, FindAllResult } from 'src/interfaces';
 import { UserQueryDto } from './dto/query-user.dto';
+import { ConfigService } from '@nestjs/config';
+import * as bcrypt from 'bcrypt';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly configService: ConfigService,
+  ) {}
 
   @Post()
   async create(@Body() createUserDto: CreateUserDto): Promise<CreateResult> {
@@ -28,9 +33,14 @@ export class UsersController {
     });
     if (tempUser) throw new BadRequestException('username already in use');
 
-    const res = await this.usersService.create(createUserDto);
+    const saltOrRounds = this.configService.get<number>('SALT_ROUNDS');
+    const hash = await bcrypt.hash(createUserDto.password, saltOrRounds);
 
-    return { id: res.id };
+    const user = await this.usersService.create({
+      username: createUserDto.username,
+      password: hash,
+    });
+    return { id: user.id };
   }
 
   @Get()

@@ -10,7 +10,7 @@ services:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     ports:
-      - ${SERVER_PORT}:${SERVER_PORT}
+      - ${SERVER_PORT:-3000}:${SERVER_PORT:-3000}
       - 9229:9229
     command: npm run start:dev
     env_file:
@@ -31,10 +31,11 @@ services:
     networks:
       - webnet
     environment:
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_USER: ${DB_USERNAME}
-      POSTGRES_DB: ${DB_DATABASE_NAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-bunotan}
+      POSTGRES_USER: ${DB_USERNAME:-bunotan}
+      POSTGRES_DB: ${DB_DATABASE_NAME:-bunotan}
       PG_DATA: /var/lib/postgresql/data
+      TEST: ${TEST:-test}
     ports:
       - 5433:5432
     volumes:
