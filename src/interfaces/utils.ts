@@ -6,3 +6,10 @@ export interface FindAllResult<T> {
 export interface CreateResult {
   id: number;
 }
+
+export interface VerifyTokenResult {
+  username: string;
+  sub: number;
+  iat: number;
+  exp: number;
+}
