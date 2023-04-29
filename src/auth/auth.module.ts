@@ -6,6 +6,7 @@ import { UsersService } from 'src/users/users.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/users/users.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import StripeService from 'src/payments/stripe.service';
 
 @Module({
   imports: [
@@ -22,6 +23,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, UsersService],
+  providers: [AuthService, UsersService, StripeService],
 })
 export class AuthModule {}

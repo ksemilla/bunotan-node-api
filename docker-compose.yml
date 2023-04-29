@@ -1,6 +1,13 @@
 version: '3.9'
 
 services:
+  stripe-cli:
+    image: stripe/stripe-cli
+    container_name: stripe-cli
+    network_mode: host
+    command: 'listen --api-key ${STRIPE_API_KEY} --device-name ${STRIPE_DEVICE_NAME} --forward-to http://localhost:3000/sw'
+    env_file:
+      - .env
   main:
     container_name: main
     build:

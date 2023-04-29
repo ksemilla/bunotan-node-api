@@ -13,6 +13,8 @@ export default () => {
         DB_DATABASE_NAME: 'bunotan',
         NODE_ENV,
         SALT_ROUNDS: 10,
+        PRICE_ID: process.env.PRICE_ID,
+        FRONT_END_URL: 'http://localhost:5173',
       }
     : {
         APP_KEY: process.env.APP_KEY,
@@ -23,5 +25,7 @@ export default () => {
         DB_DATABASE_NAME: process.env.DB_DATABASE_NAME,
         SALT_ROUNDS: process.env.SALT_ROUNDS || 10,
         NODE_ENV,
+        PRICE_ID: process.env.PRICE_ID,
+        FRONT_END_URL: process.env.FRONT_END_URL,
       };
 };

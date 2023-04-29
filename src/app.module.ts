@@ -9,6 +9,9 @@ import config from './config';
 import { JwtService } from '@nestjs/jwt';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth/auth.guard';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { DrawLotsModule } from './draw-lots/draw-lots.module';
+import { PaymentsModule } from './payments/payments.module';
 
 @Module({
   imports: [
@@ -30,8 +33,14 @@ import { AuthGuard } from './auth/auth.guard';
       isGlobal: true,
       load: [config],
     }),
+    // ThrottlerModule.forRoot({
+    //   ttl: 60,
+    //   limit: 10,
+    // }),
     AuthModule,
     UsersModule,
+    DrawLotsModule,
+    PaymentsModule,
   ],
   controllers: [AppController],
   providers: [
@@ -41,6 +50,10 @@ import { AuthGuard } from './auth/auth.guard';
       provide: APP_GUARD,
       useClass: AuthGuard,
     },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: ThrottlerGuard,
+    // },
   ],
 })
 export class AppModule {}

@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, Index } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class User {
@@ -22,4 +22,7 @@ export class User {
 
   @Column({ default: true })
   isActive: boolean;
+
+  @Column()
+  stripeCustomerId: string;
 }
