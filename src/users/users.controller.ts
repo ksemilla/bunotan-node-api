@@ -37,7 +37,7 @@ export class UsersController {
 
     const saltOrRounds = this.configService.get<number>('SALT_ROUNDS');
     const hash = await bcrypt.hash(createUserDto.password, saltOrRounds);
-    console.log('got here', createUserDto);
+
     const user = await this.usersService.create({
       username: createUserDto.username,
       password: hash,

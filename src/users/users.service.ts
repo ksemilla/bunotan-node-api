@@ -31,7 +31,7 @@ export class UsersService {
 
   async findAll(options?: FindManyOptions<User>): Promise<FindAllResult<User>> {
     const [data, count] = await this.usersRepository.findAndCount(options);
-    return { count, data };
+    return { count, list: data };
   }
 
   async findOne(options?: FindOneOptions<User>): Promise<User> {

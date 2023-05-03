@@ -1,10 +1,22 @@
-import { Controller, Delete, Get, Param, Post, Request } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+  Request,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UsersService } from 'src/users/users.service';
 import { DrawLot } from './draw-lots.entity';
 import { DrawLotsService } from './draw-lots.service';
-import { DeleteResult } from 'typeorm';
-import { Public } from 'src/auth/auth.public';
+import { DeleteResult, UpdateResult } from 'typeorm';
+import { DrawLotQueryDto } from './dto/query-draw-lot.dto';
+import { FindAllResult } from 'src/interfaces';
+import { UpdateDrawLotDto } from './dto/update-draw-lot.dto';
 
 const stripe = require('stripe')(process.env.STRIPE_API_KEY);
 
@@ -36,7 +48,10 @@ export class DrawLotsController {
   }
 
   @Get()
-  async list(@Request() req): Promise<DrawLot[]> {
+  async list(
+    @Request() req,
+    @Query() query: DrawLotQueryDto,
+  ): Promise<Promise<FindAllResult<DrawLot>>> {
     const drawLots = await this.drawLotsService.findAll({
       where: {
         owner: {
@@ -49,8 +64,27 @@ export class DrawLotsController {
         },
       },
       relations: ['owner'],
+      take: query.limit,
+      skip: query.skip,
     });
     return drawLots;
+  }
+
+  @Get(':id')
+  async getOne(@Param('id') id: number): Promise<DrawLot> {
+    return this.drawLotsService.findOne({
+      where: {
+        id,
+      },
+    });
+  }
+
+  @Put(':id')
+  async update(
+    @Param('id') id: number,
+    @Body() drawLotDto: UpdateDrawLotDto,
+  ): Promise<UpdateResult> {
+    return this.drawLotsService.update(id, drawLotDto);
   }
 
   @Delete(':id')

@@ -1,6 +1,6 @@
 export interface FindAllResult<T> {
   count: number;
-  data: T[];
+  list: T[];
 }
 
 export interface CreateResult {

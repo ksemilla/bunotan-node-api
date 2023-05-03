@@ -35,11 +35,7 @@ export class PaymentsController {
           where: { stripeCustomerId: data.customer },
         });
 
-        console.log('user', user);
-
         const drawLot = await this.drawLotsService.create({ owner: user });
-        console.log('ahhe', drawLot);
-
         break;
       default:
         break;

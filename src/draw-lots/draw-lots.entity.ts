@@ -3,8 +3,8 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  OneToOne,
   JoinColumn,
+  ManyToOne,
 } from 'typeorm';
 
 @Entity()
@@ -12,10 +12,16 @@ export class DrawLot {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => User)
+  @ManyToOne(() => User)
   @JoinColumn()
   owner: User;
 
+  @Column({ default: '' })
+  name: string;
+}
+
+@Entity()
+export class Member {
   @Column({ default: '' })
   name: string;
 }

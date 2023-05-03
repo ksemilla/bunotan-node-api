@@ -53,7 +53,7 @@ export class AuthService {
           throw new UnauthorizedException('Token has expired');
         default:
           // TODO: Replace this lol error
-          console.log(e.name);
+          // console.log(e.name);
           throw new UnauthorizedException('lol error');
       }
     }
