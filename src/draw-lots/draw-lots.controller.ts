@@ -11,12 +11,15 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UsersService } from 'src/users/users.service';
-import { DrawLot } from './draw-lots.entity';
-import { DrawLotsService } from './draw-lots.service';
+import { DrawLot, Member } from './draw-lots.entity';
+import { DrawLotsService, MembersService } from './draw-lots.service';
 import { DeleteResult, UpdateResult } from 'typeorm';
 import { DrawLotQueryDto } from './dto/query-draw-lot.dto';
-import { FindAllResult } from 'src/interfaces';
+import { CreateResult, FindAllResult } from 'src/interfaces';
 import { UpdateDrawLotDto } from './dto/update-draw-lot.dto';
+import { MemberQueryDto } from './dto/query-member.dto';
+import { CreateMemberDto } from './dto/create-member.dto';
+import { UpdateMemberDto } from './dto/update-member.dto';
 
 const stripe = require('stripe')(process.env.STRIPE_API_KEY);
 
@@ -90,5 +93,42 @@ export class DrawLotsController {
   @Delete(':id')
   async delete(@Param('id') id: number): Promise<DeleteResult> {
     return this.drawLotsService.delete(id);
+  }
+}
+
+@Controller('members')
+export class MembersController {
+  constructor(private membersService: MembersService) {}
+
+  @Get()
+  async find(@Query() query: MemberQueryDto): Promise<Member[]> {
+    return this.membersService.find({
+      where: {
+        drawLot: {
+          id: query.drawLot,
+        },
+      },
+      relations: ['drawLot'],
+    });
+  }
+
+  @Post()
+  async create(
+    @Body() createMemberDto: CreateMemberDto,
+  ): Promise<CreateResult> {
+    return { id: (await this.membersService.create(createMemberDto)).id };
+  }
+
+  @Put(':id')
+  async update(
+    @Param('id') id: number,
+    @Body() memberDto: UpdateMemberDto,
+  ): Promise<UpdateResult> {
+    return this.membersService.update(id, memberDto);
+  }
+
+  @Delete(':id')
+  async delete(@Param('id') id: number): Promise<DeleteResult> {
+    return this.membersService.delete(id);
   }
 }

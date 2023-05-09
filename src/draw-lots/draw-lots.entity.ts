@@ -5,6 +5,8 @@ import {
   PrimaryGeneratedColumn,
   JoinColumn,
   ManyToOne,
+  OneToMany,
+  Index,
 } from 'typeorm';
 
 @Entity()
@@ -22,6 +24,17 @@ export class DrawLot {
 
 @Entity()
 export class Member {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @ManyToOne(() => DrawLot)
+  @JoinColumn()
+  @Index()
+  drawLot: DrawLot;
+
   @Column({ default: '' })
   name: string;
+
+  @Column({ default: '' })
+  email: string;
 }
