@@ -20,6 +20,9 @@ export class DrawLot {
 
   @Column({ default: '' })
   name: string;
+
+  @OneToMany(() => Member, (m: Member) => m.drawLot)
+  members: Member[];
 }
 
 @Entity()
@@ -27,7 +30,7 @@ export class Member {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => DrawLot)
+  @ManyToOne(() => DrawLot, (d) => d.members)
   @JoinColumn()
   @Index()
   drawLot: DrawLot;

@@ -65,11 +65,13 @@ export class DrawLotsController {
         owner: {
           id: true,
         },
+        members: true,
       },
-      relations: ['owner'],
+      relations: ['owner', 'members'],
       take: query.limit,
       skip: query.skip,
     });
+    console.log('test', drawLots);
     return drawLots;
   }
 
